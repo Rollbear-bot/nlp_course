@@ -11,6 +11,7 @@ from matplotlib.font_manager import FontProperties
 from sklearn.cluster import KMeans
 from collections import Counter
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
+from sklearn.cluster import MeanShift
 
 
 class Handler:
@@ -47,6 +48,27 @@ class Handler:
                         # print(self.a[i][j + 3])
         return res
 
+    def get_similar_book_lt(self, name1):
+        res = []
+        res.append(str(self.a[0][1]))
+        for i in range(0, 9):
+            if name1 in self.a[i]:
+                res.append("推荐书籍")
+                for j in range(0, len(self.a[i])):
+                    if self.a[i][j] == name1:
+                        res.append(str(self.a[i][j - 1]))
+                        # print(self.a[i][j - 1])
+                        res.append(str(self.a[i][j - 2]))
+                        # print(self.a[i][j - 2])
+                        res.append(str(self.a[i][j + 1]))
+                        # print(self.a[i][j + 1])
+                        res.append(str(self.a[i][j + 2]))
+                        # print(self.a[i][j + 2])
+                        res.append(str(self.a[i][j + 3]))
+                        # print(self.a[i][j + 3])
+        return res
+
+
     def main_processing(self):
         book_data = pd.read_csv('../FinalProject/data/books.csv', nrows=3000).astype(str)
         # 读取文件
@@ -78,8 +100,10 @@ class Handler:
         # print("打印某些特征", feature_names[:10])
 
         num_clusters = 10  # 10个簇
-        km_obj, clusters = self.k_means(feature_matrix=feature_matrix,
-                                        num_clusters=num_clusters)
+        # km_obj, clusters = self.k_means(feature_matrix=feature_matrix,
+        #                                 num_clusters=num_clusters)
+        km_obj, clusters = self.k_means(feature_matrix)
+
         book_data['Cluster'] = clusters
         # print("clusters", clusters)
 
@@ -163,6 +187,12 @@ class Handler:
         km.fit(feature_matrix)
         clusters = km.labels_
         return km, clusters
+
+    # def mean_shift(self, feature_matrix):
+    #     ms = MeanShift(n_jobs=8)
+    #     ms.fit(feature_matrix.toarray())
+    #     clusters = ms.labels_
+    #     return ms, clusters
 
     def get_cluster_data(self, clustering_obj, book_data,
                          feature_names, num_clusters,

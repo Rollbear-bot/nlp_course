@@ -1,12 +1,15 @@
 from tkinter import *
 import hashlib
 import time
+from handler import Handler
 
 LOG_LINE_NUM = 0
 TEST_OUTPUT_BOOK = ['book1', 'book2', 'book3', 'book3']
 
+HANDLER = None
 
-class MY_GUI():
+
+class MY_GUI:
     def __init__(self, init_window_name):
         self.init_window_name = init_window_name
 
@@ -40,16 +43,15 @@ class MY_GUI():
     def str_trans_to_md5(self):
         src = self.init_data_Text.get(1.0, END).strip().replace("\n", "").encode()
         # print("src =",src)
+
+        global HANDLER
+        list1 = HANDLER.get_similar_book_lt(self.init_data_Text.get(1.0, END))
         if src:
             try:
-                myMd5 = hashlib.md5()
-                myMd5.update(src)
-                myMd5_Digest = myMd5.hexdigest()
-                # print(myMd5_Digest)
-                # 输出到界面
+
                 self.result_data_Text.delete(1.0, END)
-                for i in range(len(TEST_OUTPUT_BOOK)):
-                    self.result_data_Text.insert(END, "{}、《".format(i + 1) + TEST_OUTPUT_BOOK[i] + "》\n")
+                for i in range(len(list1)):
+                    self.result_data_Text.insert(END, "{}、《".format(i + 1) + list1[i] + "》\n")
                 self.write_log_to_Text("INFO:推荐成功")
             except:
                 self.result_data_Text.delete(1.0, END)
@@ -76,6 +78,8 @@ class MY_GUI():
 
 
 def gui_start():
+    global HANDLER
+    HANDLER = Handler()
     init_window = Tk()  # 实例化出一个父窗口
     ZMJ_PORTAL = MY_GUI(init_window)
     # 设置根窗口默认属性
