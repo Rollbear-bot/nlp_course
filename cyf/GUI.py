@@ -48,7 +48,6 @@ class MY_GUI:
         list1 = HANDLER.get_similar_book_lt(self.init_data_Text.get(1.0, END))
         if src:
             try:
-
                 self.result_data_Text.delete(1.0, END)
                 for i in range(len(list1)):
                     self.result_data_Text.insert(END, "{}、《".format(i + 1) + list1[i] + "》\n")

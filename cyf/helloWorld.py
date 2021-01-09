@@ -4,6 +4,6 @@ from handler import Handler
 if __name__ == '__main__':
     handler = Handler()
     name = input("?")
-    res = handler.get_similar_books(name)
+    res = handler.get_similar_book_lt(name)
 
     print(res)
