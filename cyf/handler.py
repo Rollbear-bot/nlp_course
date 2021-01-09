@@ -50,10 +50,10 @@ class Handler:
 
     def get_similar_book_lt(self, name1):
         res = []
-        res.append(str(self.a[0][1]))
+        # res.append(str(self.a[0][1]))
         for i in range(0, 9):
             if name1 in self.a[i]:
-                res.append("推荐书籍")
+                # res.append("推荐书籍")
                 for j in range(0, len(self.a[i])):
                     if self.a[i][j] == name1:
                         res.append(str(self.a[i][j - 1]))
